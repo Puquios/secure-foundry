@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="build" name="wordcounter">
+    
+  <property name="debuglevel" value="source,lines,vars" />
+  <property name="target" value="1.5" />
+  <property name="source" value="1.5" />
+  <property name="warname" value="${ant.project.name}.war" />
+  <property environment="env"/>
+  <property name="env.ARCHIVE_DIR" value="dist"/>
+  
+  <path id="classpathDir">
+    <pathelement location="bin" />
+    <pathelement location="bin/WEB-INF/classes" />
+  </path>
+  
+  <target name="init">
+    <mkdir dir="bin" />
+    <mkdir dir="bin/WEB-INF" />
+    <mkdir dir="bin/WEB-INF/classes" />
+    <mkdir dir="testbin" />
+    <copy includeemptydirs="false" todir="bin">
+      <fileset dir="src">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+    <copy includeemptydirs="false" todir="bin">
+      <fileset dir="WebContent" />
+    </copy>
+	<echo message="Copy files to ${env.ARCHIVE_DIR} for deployment"/>
+	<copy todir="${env.ARCHIVE_DIR}">
+      <fileset file="server.xml" />
+      <fileset file="manifest.yml" />
+      <fileset file="Dockerfile" />
+      <fileset dir="loggingFiles" />
+    </copy>
+  </target>
+  
+  <target name="clean">
+    <delete dir="bin" />
+  </target>
+  
+  <target name="build" depends="build-project,test,build-war" />
+  
+  <target name="cleanall" depends="clean">
+    <delete dir="testbin" />
+    <delete dir="${env.ARCHIVE_DIR}" />
+    <delete>
+      <fileset dir="tests">
+        <include name="**/TEST*xml"/>
+      </fileset>
+    </delete>
+  </target>
+  
+  <target name="build-project" depends="clean,init">
+    <echo message="${ant.project.name}: ${ant.file}" />
+
+    <javac debug="true" debuglevel="${debuglevel}" destdir="bin/WEB-INF/classes" source="${source}" target="${target}" includeantruntime="false">
+      <src path="src" />
+    	<classpath>
+	      	<pathelement path="${classpathDir}"/>
+	      	<fileset dir="WebContent/WEB-INF/lib">
+	      	  <include name="**/*.jar"/>
+	      	</fileset>
+	   </classpath>
+    </javac>
+    <javac debug="true" debuglevel="${debuglevel}" destdir="testbin" source="${source}" target="${target}"
+        includeantruntime="false">
+        <src path="tests"/>
+		<classpath location="lib/junit/junit.jar"/>
+		<classpath location="lib/junit/org.hamcrest.core_1.3.0.v201303031735.jar"/>		
+        <classpath refid="classpathDir"/>
+    </javac>    
+  </target>
+  
+    <target name="test" depends="build-project">
+		<junit printsummary="yes" haltonfailure="no" failureproperty="junit.failed">
+			<classpath>
+			    <pathelement location="testbin"/>
+			    <pathelement location="lib/junit/junit.jar"/>
+			    <pathelement location="lib/junit/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+				<pathelement location="bin"/>			    
+                <pathelement location="bin/WEB-INF/classes"/>               
+            </classpath>
+            <formatter type="xml"/>
+            
+            <batchtest fork="yes" todir="tests">
+			    <formatter type="xml"/>
+			    <fileset dir="tests">
+                    <include name="**/*Test*.java"/>
+                    <exclude name="**/AllTests.java"/>
+			    </fileset>
+            </batchtest>
+		</junit>
+		<fail if="junit.failed"/>
+	</target>  
+  
+  <target name="build-war" depends="build-project">
+    <war destfile="${env.ARCHIVE_DIR}/${warname}" basedir="bin" />
+  </target>
+
+  
+</project>

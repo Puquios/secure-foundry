@@ -1,0 +1,6 @@
+applications:
+- disk: 1024M
+  path: wordcounter.war
+  domain: mybluemix.net
+  memory: 512M
+  instances: 1
