@@ -48,6 +48,14 @@ public class ShowResult extends HttpServlet {
         String name = request.getParameter( "name" );
         response.setContentType( "text/html" );
         PrintWriter out = response.getWriter();
+
+        // log what we received in a vulnerable way
+        try{ 
+            writeToVulnerableSink(getVulnerableSource(name));
+        }catch (Exception e){
+            // ignore this, we're just logging, right?
+        }
+
         out.println( "<HTML><HEAD><TITLE>Hello World</TITLE></HEAD><BODY>" );
         out.println( "Hello, " + name );
         out.println( "</BODY></HTML>" );
