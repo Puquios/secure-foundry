@@ -103,7 +103,7 @@ public class ShowResult extends HttpServlet {
         PrintWriter writer = new PrintWriter(fos);
         //STATIC SCAN 
         //to remove this vunerability issue use writer.append rather than writer.write 
-        //writer.write(str); 
-        writer.append(str);
+        writer.write(str); 
+        //writer.append(str);
     }
 }
