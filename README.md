@@ -1,4 +1,4 @@
-# Example pipeline for helloworld node application 
+# Example Cloud Foundry pipeline for helloworld Java application using WebSphere Liberty  
 
 Press this button, to get your own copy of the sample running in Bluemix !
 
