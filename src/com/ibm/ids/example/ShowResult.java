@@ -60,8 +60,8 @@ public class ShowResult extends HttpServlet {
         out.println( "Hello, " + name );
         out.println( "</BODY></HTML>" );
     }
-*/
 
+*/
     //STATIC SCAN 
     // this version of doGet filters out bad input 
     private Pattern namePattern = Pattern.compile("^[a-zA-Z]{3,10}$");
@@ -111,7 +111,7 @@ public class ShowResult extends HttpServlet {
         PrintWriter writer = new PrintWriter(fos);
         //STATIC SCAN 
         //to remove this vunerability issue use writer.append rather than writer.write 
-        writer.write(str); 
-        //writer.append(str);
+        //writer.write(str); 
+        writer.append(str);
     }
 }
