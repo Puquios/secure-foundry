@@ -21,7 +21,7 @@ To say inject a security issue: http://myroute.mydomain?name=<img src=x onerror=
 An interesting pipeline that demonstrates a few more advanced delivery pipeline capabilties 
 
 - Package Application
-    + Basic ant build to package a war file that includes best available translation from the Globalization project 
+    + Basic ant build to package a war file
 - Security Scanning
     + Leverages code scan security services to inspect war archive for security vunerabilities, provides a link to a dashboard of versioned security reports that map to the versioned application archives.  
 - Deploy Stage
