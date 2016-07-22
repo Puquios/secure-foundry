@@ -1,30 +1,9 @@
 ---
 stages:
-- name: Globalize
+- name: Package Application
   inputs:
   - type: git
     branch: master
-  properties:
-  - name: SLACK_WEBHOOK_PATH
-    value: https://hooks.slack.com/services/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
-    type: text
-  jobs:
-  - name: Machine translation
-    type: builder
-    extension_id: ibm.devops.services.pipeline.globalization.builder
-    target:
-      url: ${CF_TARGET_URL}
-      organization: ${CF_ORGANIZATION}
-      space: ${CF_SPACE}
-    SETUP_SERVICE_SPACE: 'true'
-    INPUT_PATTERN: Messages_en.properties
-- name: Package Application
-  inputs:
-  - type: job
-    stage: Globalize
-    job: Machine translation
-  triggers:
-  - type: stage
   jobs:
   - name: Ant build
     type: builder
